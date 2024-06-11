@@ -10,4 +10,10 @@
       <ProjectReference Include="..\VideoBench.Application\VideoBench.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="PexelsDotNetSDK">
+        <HintPath>..\..\..\..\.nuget\packages\pexelsdotnetsdk\1.0.11\lib\netstandard2.0\PexelsDotNetSDK.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
