@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using VideoBench.Application.Dto;
 using VideoBench.Application.Interfaces;
 
 namespace VideoBench.Web.Controllers;
@@ -8,7 +9,7 @@ namespace VideoBench.Web.Controllers;
 public class VideoController(IVideoService videoService)
 {
     [HttpGet]
-    public Task<string?> GetVideosList()
+    public Task<VideoPageDto?> GetVideosList()
     {
         return videoService.GetVideosList("");
     }

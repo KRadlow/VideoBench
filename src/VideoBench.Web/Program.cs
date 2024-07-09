@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Options;
 using Serilog;
 using VideoBench.Application.Interfaces;
+using VideoBench.Application.Mappers;
 using VideoBench.Application.Services;
 using VideoBench.Infrastructure.Clients;
 using VideoBench.Infrastructure.Configuration;
@@ -33,6 +34,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddSingleton<IVideoApiClient, PexelsApiClient>();
 builder.Services.AddSingleton<IVideoService, VideoService>();
+
+// Add automapper
+builder.Services.AddAutoMapper(typeof(PexelsProfile));
 
 var app = builder.Build();
 

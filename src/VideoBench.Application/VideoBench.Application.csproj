@@ -10,4 +10,15 @@
       <ProjectReference Include="..\VideoBench.Domain\VideoBench.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="Newtonsoft.Json">
+        <HintPath>..\..\..\..\.nuget\packages\newtonsoft.json\13.0.3\lib\net6.0\Newtonsoft.Json.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
+      <PackageReference Include="PexelsDotNetSDK" Version="1.0.11" />
+    </ItemGroup>
+
 </Project>

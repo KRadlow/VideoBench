@@ -1,6 +1,8 @@
+using VideoBench.Application.Dto;
+
 namespace VideoBench.Application.Interfaces;
 
 public interface IVideoService
 {
-    Task<string?> GetVideosList(string query);
+    Task<VideoPageDto?> GetVideosList(string query);
 }
