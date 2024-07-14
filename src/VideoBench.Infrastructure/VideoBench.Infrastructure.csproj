@@ -10,4 +10,16 @@
       <ProjectReference Include="..\VideoBench.Application\VideoBench.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="PexelsDotNetSDK">
+        <HintPath>..\..\..\..\.nuget\packages\pexelsdotnetsdk\1.0.11\lib\netstandard2.0\PexelsDotNetSDK.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+    </ItemGroup>
+
 </Project>
