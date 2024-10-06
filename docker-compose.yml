@@ -1,0 +1,9 @@
+﻿services:
+  videobench.web:
+    image: videobench.web
+    build:
+      context: .
+      dockerfile: src/VideoBench.Web/Dockerfile
+    ports:
+      - "127.0.0.1:5000:8080"
+      - "127.0.0.1:5001:8081"
