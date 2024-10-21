@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Layout } from './pages/Layout';
-import { Loader } from './components/Loader';
+import Layout from './pages/Layout';
+import Loader from './components/Loader';
 import './styles/App.css';
 
 function App() {

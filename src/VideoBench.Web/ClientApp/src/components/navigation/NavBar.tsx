@@ -31,3 +31,5 @@ export const NavBar = () => {
     </AppBar>
   );
 }
+
+export default NavBar;

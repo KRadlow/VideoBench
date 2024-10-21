@@ -4,7 +4,7 @@ const style = {
   color: '#D16002'
 }
 
-export const Loader = () => {
+const Loader = () => {
   return (
     <GridLoader
       color={style.color}
@@ -15,3 +15,5 @@ export const Loader = () => {
     />
   );
 };
+
+export default Loader;
