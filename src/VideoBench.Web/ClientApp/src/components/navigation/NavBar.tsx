@@ -1,13 +1,11 @@
-import * as React from 'react';
 import {AppBar, Box, Toolbar, Container} from '@mui/material';
 import { UserMenu } from './UserMenu';
 import { NavBarMenu } from './NavBarMenu';
 import { styles } from '../../styles/styles'
+import AuthService from '../../services/AuthService';
 
 
 export const NavBar = () => {
-  const [auth] = React.useState(false);
-
   return (
     <AppBar
       position='fixed'
@@ -20,7 +18,7 @@ export const NavBar = () => {
             <span style={styles.SecondaryColor}>Bench</span>
           </Box>
           <Box >
-            {auth ? (
+            {AuthService.isLoggedIn() ? (
               <UserMenu />
             ) : (
               <NavBarMenu />

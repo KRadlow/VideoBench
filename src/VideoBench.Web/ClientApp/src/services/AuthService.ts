@@ -3,24 +3,29 @@ import Keycloak from 'keycloak-js';
 
 const keycloak = new Keycloak(process.env.PUBLIC_URL + '/keycloak.json')
 
-const initAuth = async () => {
-  try {
-    return await keycloak.init({
-      onLoad: 'check-sso',
-      silentCheckSsoRedirectUri: window.location.origin + process.env.PUBLIC_URL + '/silent-check-sso.html',
-      checkLoginIframe: false,
+const initAuth = (onAuthenticatedCallback: Function) => {
+  keycloak
+    .init({
+      onLoad: "check-sso",
       pkceMethod: 'S256'
+    })
+    .then(() => {
+      onAuthenticatedCallback();
+    })
+    .catch((e) => {
+      console.log(`Init exception: ${e}`);
     });
-  } catch (message) {
-    return console.error(message);
-  }
-}
+};
+
+const getUserName = () => keycloak.tokenParsed?.preferred_username;
 
 const login = keycloak.login;
 
+const register = keycloak.register;
+
 const logout = keycloak.logout;
 
-const isAuthenticated = () => keycloak.authenticated;
+const isLoggedIn = () => !!keycloak.token;
 
 const getToken = () => keycloak.token;
 
@@ -38,10 +43,12 @@ const updateToken = async (callback?: any) => {
 const AuthService = {
   initAuth,
   login,
+  register,
   logout,
-  isAuthenticated,
+  isLoggedIn,
   getToken,
-  updateToken
+  updateToken,
+  getUserName
 }
 
 export default AuthService;

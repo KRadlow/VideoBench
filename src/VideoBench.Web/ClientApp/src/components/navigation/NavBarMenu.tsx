@@ -1,29 +1,10 @@
 import React from 'react';
-import { Box, Button, Drawer, IconButton, MenuItem } from '@mui/material';
+import { Box, Drawer, IconButton, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { styles } from '../../styles/styles'
+import { styles } from '../../styles/styles';
+import AuthService from '../../services/AuthService';
+import { CustomButton } from '../Buttons';
 
-
-interface StyledButtonProps {
-  type: 'outlined' | 'contained';
-  content: string;
-}
-
-const StyledButton: React.FC<StyledButtonProps> = ({ type, content }) => {
-  return (
-    <Button variant={type}
-      fullWidth
-      style={{
-        textTransform: 'none',
-        backgroundColor: 'transparent',
-        fontFamily: 'inherit',
-        borderColor: styles.PrimaryColor.color
-      }}
-    >
-      <span style={styles.PrimaryColor}>{content}</span>
-    </Button>
-  );
-}
 
 export const NavBarMenu = () => {
   const [open, setOpen] = React.useState(false);
@@ -34,18 +15,16 @@ export const NavBarMenu = () => {
 
   return (
     <Box>
-      <Box
-        sx={{
-          display: { xs: 'none', md: 'flex' },
-          gap: 1,
-          alignItems: 'center',
-        }}
-      >
+      <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center' }} >
         <Box>
-          <StyledButton type='contained' content='Sign In' />
+          <CustomButton fullWidth variant='outlined' onClick={() => { AuthService.login() }}>
+            Sign In
+          </CustomButton>
         </Box>
         <Box>
-          <StyledButton type='outlined' content='Sign Up' />
+          <CustomButton fullWidth variant='outlined' onClick={() => { AuthService.register() }}>
+            Sign Up
+          </CustomButton>
         </Box>
       </Box>
 
@@ -65,10 +44,14 @@ export const NavBarMenu = () => {
         >
           <Box sx={{ mt: 5, p: 2, backgroundColor: styles.BackgroundColor }}>
             <MenuItem sx={{ mb: 2 }}>
-              <StyledButton type='outlined' content='Sign In' />
+              <CustomButton fullWidth variant='outlined' onClick={() => { AuthService.login() }}>
+                Sign In
+              </CustomButton>
             </MenuItem>
             <MenuItem>
-              <StyledButton type='outlined' content='Sign Up' />
+              <CustomButton fullWidth variant='outlined' onClick={() => { AuthService.register() }}>
+                Sign Up
+              </CustomButton>
             </MenuItem>
           </Box>
         </Drawer>

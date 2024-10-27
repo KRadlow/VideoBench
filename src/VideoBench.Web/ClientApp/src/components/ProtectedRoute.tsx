@@ -3,7 +3,7 @@ import AuthService from "../services/AuthService";
 
 
 const ProtectedRoute = ({ redirectPath = '/' }) => {
-  if (AuthService.isAuthenticated()) {
+  if (AuthService.isLoggedIn()) {
     return <Outlet />
   }
   return <Navigate to={redirectPath} replace />

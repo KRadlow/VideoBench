@@ -1,8 +1,8 @@
 {
   "realm": "VideoBench",
-  "resource": "public-client",
   "auth-server-url": "http://localhost:18080/",
   "ssl-required": "external",
+  "resource": "public-client",
   "public-client": true,
   "confidential-port": 0
 }

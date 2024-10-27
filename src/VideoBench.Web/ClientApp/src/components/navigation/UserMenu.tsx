@@ -1,29 +1,9 @@
-import { AccountCircle } from '@mui/icons-material';
-import { Box, Button, Divider, Drawer, IconButton, Menu, MenuItem } from '@mui/material';
 import React from 'react';
+import { AccountCircle } from '@mui/icons-material';
+import { Box, Divider, Drawer, IconButton, Menu, MenuItem } from '@mui/material';
 import { styles } from '../../styles/styles'
-
-
-interface StyledButtonProps {
-  type: 'outlined' | 'contained';
-  content: string;
-}
-
-const StyledButton: React.FC<StyledButtonProps> = ({ type, content }) => {
-  return (
-    <Button variant={type}
-      fullWidth
-      style={{
-        textTransform: 'none',
-        backgroundColor: 'transparent',
-        fontFamily: 'inherit',
-        borderColor: styles.PrimaryColor.color
-      }}
-    >
-      <span style={styles.PrimaryColor}>{content}</span>
-    </Button>
-  );
-}
+import AuthService from '../../services/AuthService';
+import { CustomButton } from '../Buttons';
 
 
 export const UserMenu = () => {
@@ -46,6 +26,7 @@ export const UserMenu = () => {
   return (
     <Box>
       <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center' }}>
+        {AuthService.getUserName()}
         <IconButton
           size='large'
           aria-label='account of current user'
@@ -79,14 +60,20 @@ export const UserMenu = () => {
           onClose={handleClose}
         >
           <MenuItem sx={{ mb: 2 }}>
-            <StyledButton type='outlined' content='Profile' />
+            <CustomButton fullWidth variant='outlined'>
+              Profile
+            </CustomButton>
           </MenuItem>
           <MenuItem sx={{ mb: 2 }}>
-            <StyledButton type='outlined' content='My account' />
+            <CustomButton fullWidth variant='outlined'>
+              My account
+            </CustomButton>
           </MenuItem>
-          <Divider variant='middle' sx={{backgroundColor:styles.PrimaryColor.color}} />
+          <Divider variant='middle' sx={{ backgroundColor: styles.PrimaryColor.color }} />
           <MenuItem sx={{ mt: 2 }}>
-            <StyledButton type='outlined' content='Logout' />
+            <CustomButton fullWidth variant='outlined' onClick={() => { AuthService.logout() }}>
+              Logout
+            </CustomButton>
           </MenuItem>
         </Menu>
       </Box>
@@ -114,14 +101,20 @@ export const UserMenu = () => {
         >
           <Box sx={{ mt: 5, p: 2, backgroundColor: styles.BackgroundColor }}>
             <MenuItem sx={{ mb: 2 }}>
-              <StyledButton type='outlined' content='Profile' />
+              <CustomButton fullWidth variant='outlined'>
+                Profile
+              </CustomButton>
             </MenuItem>
             <MenuItem sx={{ mb: 2 }}>
-              <StyledButton type='outlined' content='My account' />
+              <CustomButton fullWidth variant='outlined'>
+                My account
+              </CustomButton>
             </MenuItem>
-            <Divider variant='middle' sx={{backgroundColor:styles.PrimaryColor.color}} />
+            <Divider variant='middle' sx={{ backgroundColor: styles.PrimaryColor.color }} />
             <MenuItem sx={{ mt: 2 }}>
-              <StyledButton type='outlined' content='Logout' />
+              <CustomButton fullWidth variant='outlined' onClick={() => { AuthService.logout() }}>
+                Logout
+              </CustomButton>
             </MenuItem>
           </Box>
         </Drawer>
