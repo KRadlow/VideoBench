@@ -1,12 +1,21 @@
 ﻿services:
-  videobench.web:
-    image: videobench.web
-    container_name: videobench.api
+  videobench.backend:
+    image: videobench.backend
+    container_name: videobench.backend
     build:
       context: .
       dockerfile: src/VideoBench.Web/Dockerfile
     ports:
-      - "5000:8080"
+      - "127.0.0.1:5000:8080"
+
+  videobench.frontend:
+    image: videobench.frontend
+    container_name: videobench.app
+    build:
+      context: ./src/VideoBench.Web/ClientApp
+      dockerfile: ./Dockerfile
+    ports:
+      - "127.0.0.1:3000:3000"
 
   videobench.keycloak:
     image: quay.io/keycloak/keycloak:latest
