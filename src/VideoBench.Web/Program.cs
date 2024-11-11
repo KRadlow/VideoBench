@@ -5,6 +5,7 @@ using VideoBench.Application.Mappers;
 using VideoBench.Application.Services;
 using VideoBench.Infrastructure.Clients;
 using VideoBench.Infrastructure.Configuration;
+using VideoBench.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,10 +28,12 @@ builder.Services.AddSingleton(sp =>
     sp.GetRequiredService<IOptions<VideoApiConfig>>().Value);
 
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddSwaggerGenWithAuth();
 
 builder.Services.AddSingleton<IVideoApiClient, PexelsApiClient>();
 builder.Services.AddSingleton<IVideoService, VideoService>();
@@ -48,6 +51,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthorization();
 
 app.MapControllers();
 
