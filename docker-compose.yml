@@ -30,5 +30,18 @@
     ports:
       - "127.0.0.1:18080:8080"
 
+  videobench.database:
+    image: postgres:latest
+    container_name: videobench.database
+    environment:
+      - POSTGRES_DB=tests
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
+
 volumes:
   keycloak:
+  pgdata:
