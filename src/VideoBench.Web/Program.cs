@@ -28,6 +28,12 @@ builder.Services.AddSingleton(sp =>
     sp.GetRequiredService<IOptions<VideoApiConfig>>().Value);
 
 // Add services to the container.
+builder.Services.AddCors(options => options.AddPolicy("MyPolicy", policy =>
+{
+    policy.WithOrigins("http://localhost:3000")
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+}));
 builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
@@ -42,6 +48,9 @@ builder.Services.AddSingleton<IVideoService, VideoService>();
 builder.Services.AddAutoMapper(typeof(PexelsProfile));
 
 var app = builder.Build();
+
+// Enable cors middleware
+app.UseCors("MyPolicy");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

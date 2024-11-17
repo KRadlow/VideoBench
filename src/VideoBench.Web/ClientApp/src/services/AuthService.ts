@@ -29,16 +29,8 @@ const isLoggedIn = () => !!keycloak.token;
 
 const getToken = () => keycloak.token;
 
-const updateToken = async (callback?: any) => {
-  try {
-    await keycloak.updateToken(60);
-    if (callback) {
-      callback();
-    }
-  } catch {
-    logout();
-  }
-}
+const updateToken = (callback: any) =>
+  keycloak.updateToken(5).then(callback).catch(logout);
 
 const AuthService = {
   initAuth,

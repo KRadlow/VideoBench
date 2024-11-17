@@ -4,6 +4,7 @@ import reportWebVitals from './reportWebVitals';
 import AuthService from './services/AuthService';
 import './styles/index.css';
 import React from 'react';
+import HttpService from './services/HttpService';
 
 
 const renderApp = () => {
@@ -20,4 +21,5 @@ const renderApp = () => {
 reportWebVitals();
 
 AuthService.initAuth(renderApp);
+HttpService.configure();
 
