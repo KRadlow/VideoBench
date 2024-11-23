@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Serilog;
 using VideoBench.Application.Interfaces;
@@ -5,6 +6,7 @@ using VideoBench.Application.Mappers;
 using VideoBench.Application.Services;
 using VideoBench.Infrastructure.Clients;
 using VideoBench.Infrastructure.Configuration;
+using VideoBench.Infrastructure.Data;
 using VideoBench.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +42,11 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSwaggerGenWithAuth();
+
+builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
+{
+    optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("Develop"));
+});
 
 builder.Services.AddSingleton<IVideoApiClient, PexelsApiClient>();
 builder.Services.AddSingleton<IVideoService, VideoService>();
