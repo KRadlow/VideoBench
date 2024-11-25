@@ -9,9 +9,9 @@ namespace VideoBench.Web.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class QualityOptionsController(IOptionsService optionsService) : ControllerBase
+public class OptionsController(IOptionsService optionsService) : ControllerBase
 {
-    [HttpGet]
+    [HttpGet("/quality")]
     public async Task<ActionResult> GetQualityOptions()
     {
         var result = await optionsService.GetQualityOptionsAsync();
@@ -24,7 +24,7 @@ public class QualityOptionsController(IOptionsService optionsService) : Controll
         return Ok(result.Value);
     }
 
-    [HttpPost]
+    [HttpPost("quality")]
     public async Task<ActionResult> AddNewQualityOption(QualityDto qualityOption)
     {
         if (!ModelState.IsValid)
@@ -48,7 +48,7 @@ public class QualityOptionsController(IOptionsService optionsService) : Controll
         return Ok(result.Value);
     }
 
-    [HttpGet]
+    [HttpGet("/bitrate")]
     public async Task<ActionResult> GetBitrateOptions()
     {
         var userId = GetUserId();
