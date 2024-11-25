@@ -20,7 +20,12 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
 
         var result = await categoryService.GetAllAsync(userId.Value);
 
-        return Ok(result);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
+
+        return Ok(result.Value);
     }
 
     [HttpPost]
@@ -34,7 +39,12 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
 
         var result = await categoryService.AddAsync(userId.Value, categoryName);
 
-        return Ok(result);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
+
+        return Ok(result.Value);
     }
 
     private Guid? GetUserId()

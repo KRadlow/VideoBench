@@ -16,7 +16,12 @@ public class QualityOptionsController(IOptionsService optionsService) : Controll
     {
         var result = await optionsService.GetQualityOptionsAsync();
 
-        return Ok(result);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
+
+        return Ok(result.Value);
     }
 
     [HttpPost]
@@ -35,7 +40,31 @@ public class QualityOptionsController(IOptionsService optionsService) : Controll
 
         var result = await optionsService.AddQualityOptionAsync(userId.Value, qualityOption);
 
-        return Ok(result);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult> GetBitrateOptions()
+    {
+        var userId = GetUserId();
+        if (userId == null)
+        {
+            return Unauthorized("User does not exist");
+        }
+
+        var result = await optionsService.GetUserBitrateValuesAsync(userId.Value);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
+
+        return Ok(result.Value);
     }
 
     private Guid? GetUserId()

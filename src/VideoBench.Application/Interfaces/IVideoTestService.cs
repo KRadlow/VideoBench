@@ -1,10 +1,12 @@
 using VideoBench.Application.Dto;
+using VideoBench.Application.Utils;
 
 namespace VideoBench.Application.Interfaces;
 
 public interface IVideoTestService
 {
-    Task<IEnumerable<VideoTestDto>> GetAllAsync(Guid userId, int pageNumber, int pageSize);
-    Task<VideoTestDto?> GetByIdAsync(Guid testId);
-    Task<VideoTestDto> CreateAsync(VideoTestDto videoTest, Guid userId);
+    Task<Result<IEnumerable<VideoTestDto>>> GetAllAsync(Guid userId, int pageNumber, int pageSize);
+    Task<Result<VideoTestDto>> GetByIdAsync(Guid testId);
+    Task<Result<VideoTestDto>> CreateAsync(VideoTestDto videoTest, Guid userId);
+    Task<Result<SurveyDto>> AddNewSurveyAsync(Guid testId, SurveyDto survey);
 }

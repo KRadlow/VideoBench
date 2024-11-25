@@ -1,9 +1,10 @@
 using VideoBench.Application.Dto;
+using VideoBench.Application.Utils;
 
 namespace VideoBench.Application.Interfaces;
 
 public interface ICategoryService
 {
-    Task<IEnumerable<CategoryDto>> GetAllAsync(Guid userId);
-    Task<CategoryDto> AddAsync(Guid userId, string categoryName );
+    Task<Result<IEnumerable<CategoryDto>>> GetAllAsync(Guid userId);
+    Task<Result<CategoryDto>> AddAsync(Guid userId, string categoryName );
 }

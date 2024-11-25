@@ -34,4 +34,10 @@ public class VideoTestRepository(AppDbContext context) : IVideoTestRepository
         context.VideoTests.Add(videoTest);
         await context.SaveChangesAsync();
     }
+
+    public async Task AddNewSurvey(Survey survey)
+    {
+        context.Surveys.Add(survey);
+        await context.SaveChangesAsync();
+    }
 }

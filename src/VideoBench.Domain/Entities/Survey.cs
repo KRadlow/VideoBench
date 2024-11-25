@@ -16,9 +16,9 @@ public class Survey
 
     public required ICollection<Category> Categories { get; set; }
 
-    public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+    public required ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
-    public Guid TestId { get; set; }
+    public required Guid TestId { get; set; }
 
     public VideoTest Test { get; set; } = null!;
 }

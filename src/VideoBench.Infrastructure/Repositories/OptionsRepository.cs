@@ -17,4 +17,31 @@ public class OptionsRepository(AppDbContext context) : IOptionsRepository
     {
         return await context.Qualities.ToListAsync();
     }
+
+    public async Task<Bitrate> GetUserBitrateValueAsync(Guid userId, int value)
+    {
+        var bitrate = await context.BitrateValues
+            .Where(x => x.Value == value)
+            .FirstOrDefaultAsync(x => x.UserId == userId);
+
+        if (bitrate != null)
+            return bitrate;
+
+        Bitrate newBitrateValue = new()
+        {
+            Value = value,
+            UserId = userId
+        };
+        context.BitrateValues.Add(newBitrateValue);
+        await context.SaveChangesAsync();
+
+        return newBitrateValue;
+    }
+
+    public async Task<ICollection<Bitrate>> GetUserBitrateValuesAsync(Guid userId)
+    {
+        return await context.BitrateValues
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
+    }
 }

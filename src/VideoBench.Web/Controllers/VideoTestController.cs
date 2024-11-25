@@ -14,17 +14,35 @@ public class VideoTestController(IVideoTestService videoTestService) : Controlle
     {
         var result = await videoTestService.GetByIdAsync(id);
 
-        if (result == null)
+        if (!result.IsSuccess)
         {
-            return NotFound();
+            return BadRequest(result.ErrorMessage);
         }
 
-        return Ok(result);
+        return Ok(result.Value);
+    }
+
+    [HttpPost("/{testId:guid}/survey")]
+    public async Task<ActionResult> AddNewSurvey(Guid testId, SurveyDto survey)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var result = await videoTestService.AddNewSurveyAsync(testId, survey);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
+
+        return Ok(result.Value);
     }
 
     [HttpGet]
     [Authorize]
-    public async Task<ActionResult> GetAllTests(int pageNumber, int pageSize)
+    public async Task<ActionResult> GetAllTests(int pageNumber = 1, int pageSize = 10)
     {
         var userId = GetUserId();
         if (userId == null)
@@ -34,21 +52,21 @@ public class VideoTestController(IVideoTestService videoTestService) : Controlle
 
         var result = await videoTestService.GetAllAsync(userId.Value, pageNumber, pageSize);
 
-        return Ok(result);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
+
+        return Ok(result.Value);
     }
 
     [HttpPost]
     [Authorize]
-    public async Task<ActionResult> CreateNewTests(VideoTestDto videoTest)
+    public async Task<ActionResult> AddNewVideoTest(VideoTestDto videoTest)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
-        }
-
-        if (videoTest.Categories.Count == 0)
-        {
-            return BadRequest();
         }
 
         var userId = GetUserId();
@@ -59,7 +77,12 @@ public class VideoTestController(IVideoTestService videoTestService) : Controlle
 
         var result = await videoTestService.CreateAsync(videoTest, userId.Value);
 
-        return Ok(result);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
+
+        return Ok(result.Value);
     }
 
     private Guid? GetUserId()

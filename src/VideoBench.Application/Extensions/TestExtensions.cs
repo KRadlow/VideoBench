@@ -1,4 +1,3 @@
-using System.Collections;
 using VideoBench.Application.Dto;
 using VideoBench.Domain.Entities;
 
@@ -13,8 +12,10 @@ public static class TestExtensions
             Id = videoTestEntity.Id,
             StartTime = videoTestEntity.StartTime,
             EndTime = videoTestEntity.EndTime,
+            SamplesNumber = videoTestEntity.SamplesNumber,
             QualityId = videoTestEntity.QualityId,
             Categories = videoTestEntity.Categories.ToDto(),
+            BitrateValues = videoTestEntity.BitrateValues.ToDto(),
             Surveys = videoTestEntity.Surveys.Any() ? videoTestEntity.Surveys.ToDto() : null
         };
     }
