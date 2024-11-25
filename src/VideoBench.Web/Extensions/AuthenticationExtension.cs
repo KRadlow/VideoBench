@@ -20,6 +20,9 @@ public static class AuthenticationExtension
             options.Authority = configuration["Authentication:Authority"];
             options.RequireHttpsMetadata = false;
 
+            // Disable ASP.NET claims mapping
+            options.MapInboundClaims = false;
+
             // JWT Token Validation
             options.TokenValidationParameters = new TokenValidationParameters
             {

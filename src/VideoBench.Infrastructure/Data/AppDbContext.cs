@@ -17,5 +17,5 @@ public class AppDbContext : DbContext
     public DbSet<Quality> Qualities { get; set; }
     public DbSet<VideoTest> VideoTests { get; set; }
     public DbSet<Survey> Surveys { get; set; }
-    public DbSet<Video> Videos { get; set; }
+    public DbSet<Feedback> Feedbacks { get; set; }
 }

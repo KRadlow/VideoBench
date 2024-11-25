@@ -4,9 +4,11 @@ using Serilog;
 using VideoBench.Application.Interfaces;
 using VideoBench.Application.Mappers;
 using VideoBench.Application.Services;
+using VideoBench.Domain.Interfaces;
 using VideoBench.Infrastructure.Clients;
 using VideoBench.Infrastructure.Configuration;
 using VideoBench.Infrastructure.Data;
+using VideoBench.Infrastructure.Repositories;
 using VideoBench.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,10 +51,19 @@ builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
 });
 
 builder.Services.AddSingleton<IVideoApiClient, PexelsApiClient>();
-builder.Services.AddSingleton<IVideoService, VideoService>();
+builder.Services.AddScoped<IVideoService, VideoService>();
+builder.Services.AddScoped<IVideoTestRepository, VideoTestRepository>();
+builder.Services.AddScoped<IVideoTestService, VideoTestService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IOptionsRepository, OptionsRepository>();
+builder.Services.AddScoped<IOptionsService, OptionsService>();
 
 // Add automapper
 builder.Services.AddAutoMapper(typeof(PexelsProfile));
+
+// Configure route paths
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 var app = builder.Build();
 

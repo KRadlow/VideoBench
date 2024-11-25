@@ -12,8 +12,8 @@ using VideoBench.Infrastructure.Data;
 namespace VideoBench.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241122234959_DatabaseUpdate")]
-    partial class DatabaseUpdate
+    [Migration("20241124234942_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,8 +27,8 @@ namespace VideoBench.Infrastructure.Migrations
 
             modelBuilder.Entity("CategorySurvey", b =>
                 {
-                    b.Property<int>("CategoriesId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("CategoriesId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("SurveysId")
                         .HasColumnType("uuid");
@@ -42,26 +42,27 @@ namespace VideoBench.Infrastructure.Migrations
 
             modelBuilder.Entity("CategoryVideoTest", b =>
                 {
-                    b.Property<int>("CategoriesId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("VideoTestsId")
+                    b.Property<Guid>("CategoriesId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("CategoriesId", "VideoTestsId");
+                    b.Property<Guid>("TestsId")
+                        .HasColumnType("uuid");
 
-                    b.HasIndex("VideoTestsId");
+                    b.HasKey("CategoriesId", "TestsId");
+
+                    b.HasIndex("TestsId");
 
                     b.ToTable("CategoryVideoTest");
                 });
 
             modelBuilder.Entity("VideoBench.Domain.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -69,7 +70,39 @@ namespace VideoBench.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("category");
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("VideoBench.Domain.Entities.Feedback", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Bitrate")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("RatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("SurveyId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("VideoId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SurveyId");
+
+                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("VideoBench.Domain.Entities.Quality", b =>
@@ -79,6 +112,9 @@ namespace VideoBench.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Height")
                         .HasColumnType("integer");
@@ -92,7 +128,7 @@ namespace VideoBench.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("quality");
+                    b.ToTable("Qualities");
                 });
 
             modelBuilder.Entity("VideoBench.Domain.Entities.Survey", b =>
@@ -107,54 +143,27 @@ namespace VideoBench.Infrastructure.Migrations
                     b.Property<int>("DeviceType")
                         .HasColumnType("integer");
 
+                    b.Property<Guid>("TestId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("VideoTestId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("VideoTestId");
+                    b.HasIndex("TestId");
 
-                    b.ToTable("survey");
-                });
-
-            modelBuilder.Entity("VideoBench.Domain.Entities.Video", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Bitrate")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Link")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Rate")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SourceId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("SurveyId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SurveyId");
-
-                    b.ToTable("video");
+                    b.ToTable("Surveys");
                 });
 
             modelBuilder.Entity("VideoBench.Domain.Entities.VideoTest", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("EndTime")
@@ -166,15 +175,11 @@ namespace VideoBench.Infrastructure.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("QualityId");
 
-                    b.ToTable("video_test");
+                    b.ToTable("Tests");
                 });
 
             modelBuilder.Entity("CategorySurvey", b =>
@@ -202,26 +207,15 @@ namespace VideoBench.Infrastructure.Migrations
 
                     b.HasOne("VideoBench.Domain.Entities.VideoTest", null)
                         .WithMany()
-                        .HasForeignKey("VideoTestsId")
+                        .HasForeignKey("TestsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("VideoBench.Domain.Entities.Survey", b =>
-                {
-                    b.HasOne("VideoBench.Domain.Entities.VideoTest", "VideoTest")
-                        .WithMany("Surveys")
-                        .HasForeignKey("VideoTestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("VideoTest");
-                });
-
-            modelBuilder.Entity("VideoBench.Domain.Entities.Video", b =>
+            modelBuilder.Entity("VideoBench.Domain.Entities.Feedback", b =>
                 {
                     b.HasOne("VideoBench.Domain.Entities.Survey", "Survey")
-                        .WithMany("Videos")
+                        .WithMany("Feedbacks")
                         .HasForeignKey("SurveyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -229,10 +223,21 @@ namespace VideoBench.Infrastructure.Migrations
                     b.Navigation("Survey");
                 });
 
+            modelBuilder.Entity("VideoBench.Domain.Entities.Survey", b =>
+                {
+                    b.HasOne("VideoBench.Domain.Entities.VideoTest", "Test")
+                        .WithMany("Surveys")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Test");
+                });
+
             modelBuilder.Entity("VideoBench.Domain.Entities.VideoTest", b =>
                 {
                     b.HasOne("VideoBench.Domain.Entities.Quality", "Quality")
-                        .WithMany("VideoTests")
+                        .WithMany("Tests")
                         .HasForeignKey("QualityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -242,12 +247,12 @@ namespace VideoBench.Infrastructure.Migrations
 
             modelBuilder.Entity("VideoBench.Domain.Entities.Quality", b =>
                 {
-                    b.Navigation("VideoTests");
+                    b.Navigation("Tests");
                 });
 
             modelBuilder.Entity("VideoBench.Domain.Entities.Survey", b =>
                 {
-                    b.Navigation("Videos");
+                    b.Navigation("Feedbacks");
                 });
 
             modelBuilder.Entity("VideoBench.Domain.Entities.VideoTest", b =>
