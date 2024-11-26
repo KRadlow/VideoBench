@@ -18,6 +18,15 @@ public class VideoTestService(IVideoTestRepository videoTestRepository, ICategor
             return Result<IEnumerable<VideoTestDto>>.Failure("No tests found");
         }
 
+        foreach (var test in tests)
+        {
+            var testSurveys = await videoTestRepository.GetTestSurveysAsync(test.Id, null, null);
+            if (testSurveys.Count != 0)
+            {
+                test.Surveys = testSurveys;
+            }
+        }
+
         return Result<IEnumerable<VideoTestDto>>.Success(tests.ToDto());
     }
 
@@ -25,7 +34,18 @@ public class VideoTestService(IVideoTestRepository videoTestRepository, ICategor
     {
         var test = await videoTestRepository.GetTestAsync(testId);
 
-        return test == null ? Result<VideoTestDto>.Failure("Test not found") : Result<VideoTestDto>.Success(test.ToDto());
+        if (test == null)
+        {
+            return Result<VideoTestDto>.Failure("Test not found");
+        }
+
+        var testSurveys = await videoTestRepository.GetTestSurveysAsync(test.Id, null, null);
+        if (testSurveys.Count != 0)
+        {
+            test.Surveys = testSurveys;
+        }
+
+        return Result<VideoTestDto>.Success(test.ToDto());
     }
 
     public async Task<Result<VideoTestDto>> CreateAsync(VideoTestDto videoTest, Guid userId)

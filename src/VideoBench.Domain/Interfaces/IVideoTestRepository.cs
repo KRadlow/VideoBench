@@ -8,4 +8,5 @@ public interface IVideoTestRepository
     Task<VideoTest?> GetTestAsync(Guid testId);
     Task AddTestAsync(VideoTest videoTest);
     Task AddNewSurvey(Survey survey);
+    Task<ICollection<Survey>> GetTestSurveysAsync(Guid testId, int? pageNumber, int? pageSize);
 }

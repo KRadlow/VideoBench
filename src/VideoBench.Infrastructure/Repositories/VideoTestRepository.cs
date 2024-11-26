@@ -13,6 +13,7 @@ public class VideoTestRepository(AppDbContext context) : IVideoTestRepository
             .Where(x => x.CreatedBy == userId)
             .OrderBy(x => x.EndTime)
             .Include(x=>x.Categories)
+            .Include(x => x.BitrateValues)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -24,6 +25,8 @@ public class VideoTestRepository(AppDbContext context) : IVideoTestRepository
     {
         var test = await context.VideoTests
             .Include(x => x.Categories)
+            .Include(x => x.BitrateValues)
+            .Include(x => x.Surveys)
             .FirstOrDefaultAsync(x => x.Id == testId);
 
         return test;
@@ -39,5 +42,27 @@ public class VideoTestRepository(AppDbContext context) : IVideoTestRepository
     {
         context.Surveys.Add(survey);
         await context.SaveChangesAsync();
+    }
+
+    public async Task<ICollection<Survey>> GetTestSurveysAsync(Guid testId, int? pageNumber, int? pageSize)
+    {
+        if (pageNumber is >= 0 && pageSize is > 0)
+        {
+            return await context.Surveys
+                .Where(x => x.TestId == testId)
+                .OrderBy(x => x.CreatedAt)
+                .Include(x=>x.Categories)
+                .Include(x => x.Feedbacks)
+                .Skip((pageNumber.Value - 1) * pageSize.Value)
+                .Take(pageSize.Value)
+                .ToListAsync();
+        }
+
+        return await context.Surveys
+            .Where(x => x.TestId == testId)
+            .OrderBy(x => x.CreatedAt)
+            .Include(x=>x.Categories)
+            .Include(x => x.Feedbacks)
+            .ToListAsync();
     }
 }

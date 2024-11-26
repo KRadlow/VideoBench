@@ -10,7 +10,7 @@ public class Survey
 
     public required string Username { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public required DeviceType DeviceType { get; set; }
 
