@@ -24,12 +24,18 @@ builder.Logging.AddSerilog(logger);
 
 // Configuration
 builder.Services.AddOptions<VideoApiConfig>()
-    .BindConfiguration(VideoApiConfig.ApiConfig)
+    .BindConfiguration(VideoApiConfig.Config)
     .ValidateDataAnnotations()
     .ValidateOnStart();
-
 builder.Services.AddSingleton(sp =>
     sp.GetRequiredService<IOptions<VideoApiConfig>>().Value);
+
+builder.Services.AddOptions<FileServiceConfig>()
+    .BindConfiguration(FileServiceConfig.Config)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+builder.Services.AddSingleton(sp =>
+    sp.GetRequiredService<IOptions<FileServiceConfig>>().Value);
 
 // Add services to the container.
 builder.Services.AddCors(options => options.AddPolicy("MyPolicy", policy =>
@@ -50,8 +56,8 @@ builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
     optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("Develop"));
 });
 
-builder.Services.AddSingleton<IVideoApiClient, PexelsApiClient>();
-builder.Services.AddScoped<IVideoService, VideoService>();
+builder.Services.AddSingleton<IVideoApiClient, VideoApiClient>();
+builder.Services.AddSingleton<IFileServiceClient, FileServiceClient>();
 builder.Services.AddScoped<IVideoTestRepository, VideoTestRepository>();
 builder.Services.AddScoped<IVideoTestService, VideoTestService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
