@@ -9,29 +9,10 @@ namespace VideoBench.Web.Controllers;
 [Route("api/[controller]")]
 public class VideoTestController(IVideoTestService videoTestService) : ControllerBase
 {
-    [HttpGet("/{id:guid}")]
+    [HttpGet("{id:guid}")]
     public async Task<ActionResult> GetTestById(Guid id)
     {
         var result = await videoTestService.GetByIdAsync(id);
-
-        if (!result.IsSuccess)
-        {
-            return BadRequest(result.ErrorMessage);
-        }
-
-        return Ok(result.Value);
-    }
-
-    [HttpPost("/{testId:guid}/survey")]
-    public async Task<ActionResult> AddNewSurvey(Guid testId, SurveyDto survey)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var result = await videoTestService.AddNewSurveyAsync(testId, survey);
-
         if (!result.IsSuccess)
         {
             return BadRequest(result.ErrorMessage);
@@ -51,7 +32,6 @@ public class VideoTestController(IVideoTestService videoTestService) : Controlle
         }
 
         var result = await videoTestService.GetAllAsync(userId.Value, pageNumber, pageSize);
-
         if (!result.IsSuccess)
         {
             return BadRequest(result.ErrorMessage);
@@ -76,7 +56,47 @@ public class VideoTestController(IVideoTestService videoTestService) : Controlle
         }
 
         var result = await videoTestService.CreateAsync(videoTest, userId.Value);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
 
+        return Ok(result.Value);
+    }
+
+    [HttpPost("{testId:guid}/survey")]
+    public async Task<ActionResult> AddNewSurvey(Guid testId, SurveyDto survey)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var result = await videoTestService.AddNewSurveyAsync(testId, survey);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpGet("survey/{surveyId:guid}")]
+    public async Task<ActionResult> GetVideoLink(Guid surveyId)
+    {
+        var result = await videoTestService.GetVideoLink(surveyId);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost("survey/{surveyId:guid}")]
+    public async Task<ActionResult> RateVideo(Guid surveyId, int score)
+    {
+        var result = await videoTestService.RateVideoAsync(surveyId, score);
         if (!result.IsSuccess)
         {
             return BadRequest(result.ErrorMessage);

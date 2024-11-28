@@ -1,6 +1,7 @@
 using Minio;
 using Minio.DataModel;
 using Minio.DataModel.Args;
+using Minio.Exceptions;
 using VideoBench.Application.Interfaces;
 using VideoBench.Infrastructure.Configuration;
 
@@ -48,5 +49,31 @@ public class FileServiceClient(FileServiceConfig config) : IFileServiceClient
         ObjectStat objectStat = await _minio.StatObjectAsync(stat);
 
         return objectStat.ObjectName;
+    }
+
+    public async Task<string?> GetVideoLinkAsync(string fileName, string bucketName, int expirySeconds)
+    {
+        try
+        {
+            StatObjectArgs stat = new StatObjectArgs()
+                .WithBucket(bucketName)
+                .WithObject(fileName);
+
+            ObjectStat objectStat = await _minio.StatObjectAsync(stat);
+            if (objectStat.ObjectName != fileName)
+            {
+                return null;
+            }
+
+            return await _minio.PresignedGetObjectAsync(new PresignedGetObjectArgs()
+                .WithBucket(bucketName)
+                .WithObject(fileName)
+                .WithExpiry(expirySeconds));
+        }
+        catch (MinioException e)
+        {
+            Console.WriteLine(e);
+            return null;
+        }
     }
 }

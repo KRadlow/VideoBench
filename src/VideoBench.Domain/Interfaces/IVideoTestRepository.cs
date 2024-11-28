@@ -9,4 +9,6 @@ public interface IVideoTestRepository
     Task AddTestAsync(VideoTest videoTest);
     Task AddNewSurvey(Survey survey);
     Task<ICollection<Survey>> GetTestSurveysAsync(Guid testId, int? pageNumber, int? pageSize);
+    Task<Feedback?> GetFeedbackWithoutScoreAsync(Guid surveyId);
+    Task<Feedback?> AddScoreToFeedbackAsync(Guid surveyId, int score);
 }

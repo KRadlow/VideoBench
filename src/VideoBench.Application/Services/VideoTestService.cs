@@ -166,4 +166,32 @@ public class VideoTestService(IVideoTestRepository videoTestRepository, ICategor
 
         return Result<SurveyDto>.Success(newSurvey.ToDto());
     }
+
+    public async Task<Result<string>> GetVideoLink(Guid surveyId)
+    {
+        Feedback? feedback = await videoTestRepository.GetFeedbackWithoutScoreAsync(surveyId);
+        if (feedback == null)
+        {
+            return Result<string>.Failure("Survey not found");
+        }
+
+        string? link = await fileService.GetVideoLinkAsync(feedback.Id.ToString(), surveyId.ToString(), 600);
+        if (link == null)
+        {
+            return Result<string>.Failure("Video not found");
+        }
+
+        return Result<string>.Success(link);
+    }
+
+    public async Task<Result<FeedbackDto>> RateVideoAsync(Guid surveyId, int score)
+    {
+        Feedback? feedback = await videoTestRepository.AddScoreToFeedbackAsync(surveyId, score);
+        if (feedback == null)
+        {
+            return Result<FeedbackDto>.Failure("Survey not found");
+        }
+
+        return Result<FeedbackDto>.Success(feedback.ToDto());
+    }
 }

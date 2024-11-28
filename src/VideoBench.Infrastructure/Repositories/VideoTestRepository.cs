@@ -65,4 +65,30 @@ public class VideoTestRepository(AppDbContext context) : IVideoTestRepository
             .Include(x => x.Feedbacks)
             .ToListAsync();
     }
+
+    public async Task<Feedback?> GetFeedbackWithoutScoreAsync(Guid surveyId)
+    {
+        return await context.Feedbacks
+            .Where(x => x.SurveyId == surveyId)
+            .Where(x => x.Score == 0)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<Feedback?> AddScoreToFeedbackAsync(Guid surveyId, int score)
+    {
+        var feedback = await context.Feedbacks
+            .Where(x => x.SurveyId == surveyId)
+            .Where(x => x.Score == 0)
+            .FirstOrDefaultAsync();
+
+        if (feedback == null)
+        {
+            return null;
+        }
+
+        feedback.Score = score;
+        feedback.RatedAt = DateTime.UtcNow;
+        await context.SaveChangesAsync();
+        return feedback;
+    }
 }

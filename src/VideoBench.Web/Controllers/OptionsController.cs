@@ -11,7 +11,7 @@ namespace VideoBench.Web.Controllers;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class OptionsController(IOptionsService optionsService) : ControllerBase
 {
-    [HttpGet("/quality")]
+    [HttpGet("quality")]
     public async Task<ActionResult> GetQualityOptions()
     {
         var result = await optionsService.GetQualityOptionsAsync();
@@ -48,7 +48,7 @@ public class OptionsController(IOptionsService optionsService) : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpGet("/bitrate")]
+    [HttpGet("bitrate")]
     public async Task<ActionResult> GetBitrateOptions()
     {
         var userId = GetUserId();

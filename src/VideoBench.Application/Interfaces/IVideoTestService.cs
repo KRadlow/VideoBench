@@ -9,4 +9,6 @@ public interface IVideoTestService
     Task<Result<VideoTestDto>> GetByIdAsync(Guid testId);
     Task<Result<VideoTestDto>> CreateAsync(VideoTestDto videoTest, Guid userId);
     Task<Result<SurveyDto>> AddNewSurveyAsync(Guid testId, SurveyDto survey);
+    Task<Result<string>> GetVideoLink(Guid surveyId);
+    Task<Result<FeedbackDto>> RateVideoAsync(Guid surveyId, int score);
 }
