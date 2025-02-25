@@ -4,11 +4,11 @@
     container_name: videobench.backend
     build:
       context: .
-      dockerfile: src/VideoBench.Web/Dockerfile
+      dockerfile: ./Dockerfile
     ports:
       - '5000:8080'
-    expose:
-      - '5000'
+    networks:
+      - videobench
 
   videobench.frontend:
     image: videobench.frontend
@@ -18,8 +18,8 @@
       dockerfile: ./Dockerfile
     ports:
       - '3000:3000'
-    expose:
-      - '3000'
+    networks:
+      - videobench
 
   videobench.keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -33,8 +33,6 @@
       - keycloak:/opt/keycloak/data/
     ports:
       - '18080:8080'
-    expose:
-      - '18080'
 
   videobench.database:
     image: postgres:latest
@@ -47,8 +45,8 @@
       - pgdata:/var/lib/postgresql/data
     ports:
       - '5432:5432'
-    expose:
-      - '5432'
+    networks:
+      - videobench
 
   videobench.minio:
     image: quay.io/minio/minio:latest
@@ -62,8 +60,14 @@
       MINIO_ROOT_PASSWORD: password
     volumes:
       - minio:/data
+    networks:
+      - videobench
 
 volumes:
   keycloak:
   pgdata:
   minio:
+
+networks:
+  videobench:
+    driver: bridge
