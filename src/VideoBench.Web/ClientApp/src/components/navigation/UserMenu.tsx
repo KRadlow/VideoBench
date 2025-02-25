@@ -5,6 +5,9 @@ import { styles } from '../../styles/styles'
 import AuthService from '../../services/AuthService';
 import { CustomButton } from '../Buttons';
 
+const navigate = (path: string) => {
+  window.location.href = `${path}`
+}
 
 export const UserMenu = () => {
   const [menuOpen, setMenuOpen] = React.useState<null | HTMLElement>(null);
@@ -60,13 +63,13 @@ export const UserMenu = () => {
           onClose={handleClose}
         >
           <MenuItem sx={{ mb: 2 }}>
-            <CustomButton fullWidth variant='outlined'>
-              Profile
+            <CustomButton fullWidth variant='outlined' onClick={() => navigate('/user')}>
+              My account
             </CustomButton>
           </MenuItem>
           <MenuItem sx={{ mb: 2 }}>
-            <CustomButton fullWidth variant='outlined'>
-              My account
+            <CustomButton fullWidth variant='outlined' onClick={() => navigate('/new')}>
+              Add new
             </CustomButton>
           </MenuItem>
           <Divider variant='middle' sx={{ backgroundColor: styles.PrimaryColor.color }} />
@@ -101,13 +104,13 @@ export const UserMenu = () => {
         >
           <Box sx={{ mt: 5, p: 2, backgroundColor: styles.BackgroundColor }}>
             <MenuItem sx={{ mb: 2 }}>
-              <CustomButton fullWidth variant='outlined'>
-                Profile
+              <CustomButton fullWidth variant='outlined' onClick={() => navigate('/user')}>
+                My account
               </CustomButton>
             </MenuItem>
             <MenuItem sx={{ mb: 2 }}>
-              <CustomButton fullWidth variant='outlined'>
-                My account
+              <CustomButton fullWidth variant='outlined' onClick={() => navigate('/new')}>
+                Add new
               </CustomButton>
             </MenuItem>
             <Divider variant='middle' sx={{ backgroundColor: styles.PrimaryColor.color }} />
